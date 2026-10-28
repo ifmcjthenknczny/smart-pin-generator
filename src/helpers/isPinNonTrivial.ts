@@ -33,12 +33,7 @@ function isPinValidDate(pin: string) {
 }
 
 export function isPinNonTrivial(pin: string): boolean {
-  const digitsCount = pin.length
   const pinDigits = pin.split('').map(Number)
-
-  if (pinDigits.length < digitsCount) {
-    return false
-  }
 
   const firstDigit = pinDigits[0]
   if (firstDigit === 0) {

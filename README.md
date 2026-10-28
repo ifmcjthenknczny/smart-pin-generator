@@ -1,50 +1,66 @@
-# random-good-pins
+# Nontrivial PIN Generator
 
-This template should help get you started developing with Vue 3 in Vite.
+A minimalist Vue 3 application that generates a random, hard to guess PIN of a chosen length (from 4 to 10 digits) and displays it as large as possible using SVG auto-scaling.
 
-## Recommended IDE Setup
+## Overview
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **Responsive SVG Display:** Automatically scales numbers to fit the screen without scrollbars or heavy pixel-measuring JavaScript logic.
+- **Dynamic Controls:** Range slider allowing seamless toggling between 4 and 10 digits.
+- **Minimalist UI:** Clean black & white design with no external CSS framework dependencies.
 
-This project replaces its workspace TypeScript package with [typescript-native-bridge](https://github.com/johnsoncodehk/typescript-native-bridge). Command-line tools use the bridge automatically. To use it in VS Code after installing dependencies, accept the prompt to use the workspace TypeScript version. If the prompt does not appear, run **TypeScript: Select TypeScript Version** and choose **Use Workspace Version**.
+## PIN Validation Logic
 
-## Recommended Browser Setup
+A generated PIN is considered **non-trivial** only if it meets all of the following criteria:
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- **No Zero Start/End:** Must not start with `0`, and must not end with `0` or `5`.
+- **Unique Digits:** All digits within the PIN must be unique.
+- **No Monotonicity:** Cannot be strictly ascending or descending (e.g., `1234`, `1268`, `4321` or `9861`).
+- **Not a Date:** Must not match any valid date format for 4, 6, or 8-digit lengths.
 
-## Type Support for `.vue` Imports in TS
+> The system generates a random PIN and validates it against these rules.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Local Setup
 
-## Customize configuration
+### Prerequisites
+- Node.js (v24+ recommended)
+- npm
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Getting Started
 
-## Project Setup
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/ifmcjthenknczny/nontrivial-pin-generator.git](https://github.com/ifmcjthenknczny/nontrivial-pin-generator.git)
+   cd nontrivial-pin-generator
 
-```sh
-yarn
 ```
 
-### Compile and Hot-Reload for Development
+2. **Install dependencies:**
+```bash
+npm install
 
-```sh
-yarn dev
 ```
 
-### Type-Check, Compile and Minify for Production
 
-```sh
-yarn build
+3. **Run development server:**
+```bash
+npm run dev
+
 ```
 
-### Lint with [ESLint](https://eslint.org/)
 
-```sh
-yarn lint
+4. **Build for production:**
+```bash
+npm run build
+
 ```
+
+## License
+
+Distributed under the [MIT](https://www.google.com/search?q=LICENSE) License.
+
+## Contact
+
+For questions or feedback, please reach out via GitHub.
+[ifmcjthenknczny](https://github.com/ifmcjthenknczny)  
+
+Project Link: [https://github.com/ifmcjthenknczny/nontrivial-pin-generator.git](https://github.com/ifmcjthenknczny/nontrivial-pin-generator.git)
