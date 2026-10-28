@@ -86,15 +86,6 @@ function generateNonTrivialPin() {
   return pin
 }
 
-const countValidPins = (digits: number) => {
-  let validCount = 0
-  for (let i = 0; i < 10**digits; i++) {
-    if (isPinNonTrivial(String(i).padStart(digits), {consecutiveThreshold: SEQUENTIAL_DIGITS_LIMIT})) {
-
-    }
-  }
-}
-
 watch(digitsCount, () => {
   generateNonTrivialPin()
 })
