@@ -1,13 +1,6 @@
 import { EIGHT_DIGIT_FORMATS, FOUR_DIGIT_FORMATS, SIX_DIGIT_FORMATS } from './dateFormat'
 import { isValidDate } from './isValidDate'
 
-function toMonocity(digit1?: number, digit2?: number) {
-  if (digit1 === undefined || digit2 === undefined) {
-    throw new Error('Pin digit is not a number')
-  }
-  return digit2 > digit1 ? 'ASC' : 'DESC'
-}
-
 function isPinValidDate(pin: string) {
   const digitsCount = String(pin).length
 
@@ -32,7 +25,26 @@ function isPinValidDate(pin: string) {
   return false
 }
 
-export function isPinNonTrivial(pin: string): boolean {
+function hasSequentialDigits(pin: string, consecutiveThreshold: number) {
+  const ASC_SEQUENCE = '0123456789'
+  const DESC_SEQUENCE = '9876543210'
+
+  for (let i = 0; i <= pin.length - consecutiveThreshold; i++) {
+    const sub = pin.substring(i, i + consecutiveThreshold)
+
+    if (ASC_SEQUENCE.includes(sub) || DESC_SEQUENCE.includes(sub)) {
+      return true
+    }
+  }
+
+  return false
+}
+
+type IsPinNonTrivialOptions = {
+  consecutiveThreshold: number
+}
+
+export function isPinNonTrivial(pin: string, { consecutiveThreshold }: IsPinNonTrivialOptions) {
   const pinDigits = pin.split('').map(Number)
 
   const firstDigit = pinDigits[0]
@@ -50,19 +62,29 @@ export function isPinNonTrivial(pin: string): boolean {
     return false
   }
 
-  const digitsMonotonicity = pinDigits
-    .slice(0, -1)
-    .map((_, i) => toMonocity(pinDigits[i], pinDigits[i + 1]))
+  const digitsDifference = pinDigits.slice(0, -1).map((_, i) => {
+    const current = pinDigits[i]
+    const next = pinDigits[i + 1]
 
-  if (
-    digitsMonotonicity.every((monotonicity) => monotonicity === 'ASC') ||
-    digitsMonotonicity.every((monotonicity) => monotonicity === 'DESC')
-  ) {
+    if (current === undefined || next === undefined) {
+      return 0
+    }
+
+    return next - current
+  })
+  const isMonotonic =
+    digitsDifference.every((diff) => diff > 0) || digitsDifference.every((diff) => diff < 0)
+  if (isMonotonic) {
     return false
   }
 
   const isDatelike = isPinValidDate(pin)
   if (isDatelike) {
+    return false
+  }
+
+  const isSequentialLike = hasSequentialDigits(pin, consecutiveThreshold)
+  if (isSequentialLike) {
     return false
   }
 

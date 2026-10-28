@@ -50,6 +50,8 @@ const DIGITS_COUNT = {
   max: 10,
 }
 
+const SEQUENTIAL_DIGITS_LIMIT = 3
+
 const digitsCount = ref(DIGITS_COUNT.default)
 const currentPin = ref('')
 
@@ -77,11 +79,20 @@ function generateNonTrivialPin() {
 
   while (isTrivial) {
     pin = randomizePin(digitsCount.value)
-    isTrivial = !isPinNonTrivial(pin)
+    isTrivial = !isPinNonTrivial(pin, { consecutiveThreshold: SEQUENTIAL_DIGITS_LIMIT })
   }
 
   currentPin.value = pin.toString().padStart(digitsCount.value)
   return pin
+}
+
+const countValidPins = (digits: number) => {
+  let validCount = 0
+  for (let i = 0; i < 10**digits; i++) {
+    if (isPinNonTrivial(String(i).padStart(digits), {consecutiveThreshold: SEQUENTIAL_DIGITS_LIMIT})) {
+
+    }
+  }
 }
 
 watch(digitsCount, () => {
@@ -95,31 +106,34 @@ onMounted(() => {
 
 <style scoped>
 .container {
-  min-height: 100vh;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
   background-color: #ffffff;
   color: #000000;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
+  padding: 1rem;
   user-select: none;
   font-family: monospace;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .header {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: 0.5rem;
+  padding-top: 0.25rem;
 }
 
 .generate-btn {
-  padding: 0.75rem 2rem;
+  padding: 0.6rem 1.75rem;
   background-color: #000000;
   color: #ffffff;
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
   border: none;
   border-radius: 9999px;
@@ -144,14 +158,15 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   overflow: hidden;
+  min-height: 0;
 }
 
 .svg-display {
   width: 100%;
   height: 100%;
-  max-height: 70vh;
+  max-height: 50vh;
 }
 
 .footer {
@@ -160,8 +175,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  padding-bottom: 1rem;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .info-row {
@@ -197,5 +212,58 @@ onMounted(() => {
   outline: none;
   accent-color: #000000;
   cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 440px;
+    height: 720px;
+    padding: 1.75rem;
+  }
+
+  .generate-btn {
+    padding: 0.75rem 2rem;
+    font-size: 1.125rem;
+  }
+
+  .svg-display {
+    max-height: 400px;
+  }
+
+  .footer {
+    max-width: 100%;
+    gap: 0.75rem;
+    padding-bottom: 0;
+  }
+}
+
+@media print {
+  .header,
+  .footer {
+    display: none !important;
+  }
+
+  .container {
+    width: 100%;
+    height: 100vh;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .main {
+    margin: 0;
+    flex: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  .svg-display {
+    max-height: 100vh;
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
