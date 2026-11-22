@@ -41,10 +41,15 @@ function hasSequentialDigits(pin: string, consecutiveThreshold: number) {
 }
 
 type IsPinNonTrivialOptions = {
-  consecutiveThreshold: number
+  consecutiveThreshold?: number
 }
 
-export function isPinNonTrivial(pin: string, { consecutiveThreshold }: IsPinNonTrivialOptions) {
+const SEQUENTIAL_DIGITS_LIMIT = 3
+
+export function isPinNonTrivial(
+  pin: string,
+  { consecutiveThreshold = SEQUENTIAL_DIGITS_LIMIT }: IsPinNonTrivialOptions = {},
+) {
   const pinDigits = pin.split('').map(Number)
 
   const firstDigit = pinDigits[0]
